@@ -1,3 +1,10 @@
 *.jar
 target/
 .idea/
+.DS_Store
+.classpath
+.project
+.settings/
+bin/
+src/.DS_Store
+src/main/.DS_Store
