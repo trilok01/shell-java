@@ -10,9 +10,13 @@ public class Main {
         	
         	String input = scanner.nextLine();
             
-        	if(input.equals("exit 0")) break;
-            
-            System.out.println(input.replace("echo ", ""));
+        	if(input.equals("exit 0")) {
+        		break;
+        	} else if(input.startsWith("echo ")) {
+        		System.out.println(input.replace("echo ", ""));
+        	} else {
+        		System.out.println(input + ": command not found");
+        	}
         }
         
         scanner.close();
