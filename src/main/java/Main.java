@@ -1,4 +1,6 @@
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -32,7 +34,7 @@ public class Main {
         			System.out.println(command + " is a shell builtin");
         			
         		} else {
-        			System.out.println(checkExecutableFile(command, args));
+        			System.out.println(checkExecutableFile(command));
         		}        		
         	} else {
         		System.out.println(input + ": command not found");
@@ -42,31 +44,15 @@ public class Main {
         scanner.close();
     }
     
-    public static String checkExecutableFile(String fileName, String[] args) {
-    	boolean fileExists = false;
-    	String resultPath = null;
-    	
-    	if(args.length == 0) {
-    		File file = new File("/bin/");
-    		fileExists = file.exists();
-    		resultPath = fileExists ? file.getAbsolutePath() : null;
+    public static String checkExecutableFile(String fileName) {
+    	for(String path : System.getenv("PATH").split(":")) {
+    		Path fullPath = Path.of(path, fileName);
     		
-    	} else {
-    		String pathString = args[0].substring(args[0].indexOf("/"));
-    		String[] pathArray = pathString.split(":");
-    		
-    		for(String path : pathArray) {
-        		
-//        		Check if any executable file exists in the given directory with the name of command
-        		fileExists = new File(path, fileName).exists();
-        		
-        		if(fileExists) {
-        			resultPath = path;
-        			break;
-        		}
-        	}
+    		if(Files.isRegularFile(fullPath)) {
+    			return fileName + " is " + fullPath.toString();
+    		}
     	}
     	
-    	return fileExists ? fileName + " is " + resultPath + "/" + fileName : fileName + ": not found";
+    	return fileName + ": not found";
     }
 }
