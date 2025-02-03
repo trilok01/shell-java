@@ -45,6 +45,24 @@ public class Main {
 //                		Check if any executable file exists in the given directory with the name of command
                 		fileExists = new File(path, command).exists();
                 		
+//                		ONLY FOR DEBUGGING. REMOVE AFTER FIXING THE BUG. STARTS HERE
+                		
+                		System.out.println("path -----> " + path + "\ncommand -----> " + command + "\nfileExists -----> " + fileExists);
+                		
+                		File[] listOfFiles = new File(path).listFiles();
+                		
+                		if(listOfFiles != null) {
+                			for (int i = 0; i < listOfFiles.length; i++) {
+                				if (listOfFiles[i].isFile()) {
+                					System.out.println("File -----> " + listOfFiles[i].getName());
+                				} else if (listOfFiles[i].isDirectory()) {
+                					System.out.println("Directory -----> " + listOfFiles[i].getName());
+                				}
+                			}
+                		}
+                		
+//                		ONLY FOR DEBUGGING. REMOVE AFTER FIXING THE BUG. ENDS HERE                		
+                		
                 		if(fileExists) {
                 			System.out.println(command + " is " + path + "/" + command);
                 			
