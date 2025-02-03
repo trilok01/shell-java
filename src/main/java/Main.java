@@ -33,56 +33,12 @@ public class Main {
         		System.out.println("args length -----> " + args.length);
         		
 //        		ONLY FOR DEBUGGING. REMOVE AFTER FIXING THE BUG. ENDS HERE
+        		
         		if(builtinCommands.contains(command)) {
         			System.out.println(command + " is a shell builtin");
         			
-        		} else if(args.length > 0) { // Proceed if argument is provided at runtime. This is for executable file
-        			
-//        			Extracts path from provided argument
-        			String pathString = args[0].substring(args[0].indexOf("/"));
-//        			Split the path and store in an array
-                	String[] pathArray = pathString.split(":");
-                	boolean fileExists = false;
-                	
-//                	Iterate over all given path to check for executable file
-                	for(String path : pathArray) {
-                		
-//                		Check if any executable file exists in the given directory with the name of command
-                		fileExists = new File(path, command).exists();
-                		
-//                		ONLY FOR DEBUGGING. REMOVE AFTER FIXING THE BUG. STARTS HERE
-                		
-                		System.out.println("path -----> " + path + "\ncommand -----> " + command + "\nfileExists -----> " + fileExists);
-                		
-                		File[] listOfFiles = new File(path).listFiles();
-                		
-                		if(listOfFiles != null) {
-                			for (int i = 0; i < listOfFiles.length; i++) {
-                				if (listOfFiles[i].isFile()) {
-                					System.out.println("File -----> " + listOfFiles[i].getName());
-                				} else if (listOfFiles[i].isDirectory()) {
-                					System.out.println("Directory -----> " + listOfFiles[i].getName());
-                				}
-                			}
-                		}
-                		
-//                		ONLY FOR DEBUGGING. REMOVE AFTER FIXING THE BUG. ENDS HERE                		
-                		
-                		if(fileExists) {
-                			System.out.println(command + " is " + path + "/" + command);
-                			
-//                			Break because only first occurrence needs to be printed
-                			break;
-                		}
-                	}
-                	
-//                	Executable file does not exist in any given directory
-                	if(!fileExists) {
-                		System.out.println(command + ": not found");
-                	}
-        			
-        		} else { // Invalid argument is given for the type command
-        			System.out.println(command + ": not found");
+        		} else {
+        			System.out.println(checkExecutableFile(command, args));
         		}        		
         	} else {
         		System.out.println(input + ": command not found");
@@ -90,5 +46,51 @@ public class Main {
         }
         
         scanner.close();
+    }
+    
+    public static String checkExecutableFile(String fileName, String[] args) {
+    	boolean fileExists = false;
+    	String resultPath = null;
+    	
+    	if(args.length == 0) {
+    		File file = new File(fileName);
+    		fileExists = file.exists();
+    		resultPath = fileExists ? file.getAbsolutePath() : null;
+    		
+    	} else {
+    		String pathString = args[0].substring(args[0].indexOf("/"));
+    		String[] pathArray = pathString.split(":");
+    		
+    		for(String path : pathArray) {
+        		
+//        		Check if any executable file exists in the given directory with the name of command
+        		fileExists = new File(path, fileName).exists();
+        		
+//        		ONLY FOR DEBUGGING. REMOVE AFTER FIXING THE BUG. STARTS HERE
+        		
+        		System.out.println("path -----> " + path + "\ncommand -----> " + fileName + "\nfileExists -----> " + fileExists);
+        		
+        		File[] listOfFiles = new File(path).listFiles();
+        		
+        		if(listOfFiles != null) {
+        			for (int i = 0; i < listOfFiles.length; i++) {
+        				if (listOfFiles[i].isFile()) {
+        					System.out.println("File -----> " + listOfFiles[i].getName());
+        				} else if (listOfFiles[i].isDirectory()) {
+        					System.out.println("Directory -----> " + listOfFiles[i].getName());
+        				}
+        			}
+        		}
+        		
+//        		ONLY FOR DEBUGGING. REMOVE AFTER FIXING THE BUG. ENDS HERE                		
+        		
+        		if(fileExists) {
+        			resultPath = path;
+        			break;
+        		}
+        	}
+    	}
+    	
+    	return fileExists ? fileName + " is " + resultPath + "/" + fileName : fileName + ": not found";
     }
 }
