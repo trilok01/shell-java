@@ -28,6 +28,11 @@ public class Main {
         	} else if(input.startsWith("type ")) {
         		String command = input.substring(5);
         		
+//        		ONLY FOR DEBUGGING. REMOVE AFTER FIXING THE BUG. STARTS HERE
+        		
+        		System.out.println("args length -----> " + args.length);
+        		
+//        		ONLY FOR DEBUGGING. REMOVE AFTER FIXING THE BUG. ENDS HERE
         		if(builtinCommands.contains(command)) {
         			System.out.println(command + " is a shell builtin");
         			
